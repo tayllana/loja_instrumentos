@@ -19,40 +19,40 @@ public class Inventory {
 		guitarList.remove(guitar);
 	}
 
-//	public List<Guitar> search(Guitar searchGuitar) {
-	public void search(Guitar searchGuitar) {
+    public void search(GuitarSpec searchSpec) {
         List<Guitar> matchingGuitars = new ArrayList<>();
 
         for (Guitar guitar : guitarList) {
-            if (searchGuitar.getBuilder() != null && !searchGuitar.getBuilder().equals(guitar.getBuilder())) {
+            GuitarSpec guitarSpec = guitar.getSpec();
+
+            if (searchSpec.getBuilder() != null && !searchSpec.getBuilder().equals(guitarSpec.getBuilder())) {
                 continue;
             }
 
-            if (searchGuitar.getModel() != null && !searchGuitar.getModel().equals(guitar.getModel())) {
+            if (searchSpec.getModel() != null && !searchSpec.getModel().equals(guitarSpec.getModel())) {
                 continue;
             }
 
-            if (searchGuitar.getType() != null && !searchGuitar.getType().equals(guitar.getType())) {
+            if (searchSpec.getType() != null && !searchSpec.getType().equals(guitarSpec.getType())) {
                 continue;
             }
 
-            if (searchGuitar.getBackWood() != null && !searchGuitar.getBackWood().equals(guitar.getBackWood())) {
+            if (searchSpec.getBackWood() != null && !searchSpec.getBackWood().equals(guitarSpec.getBackWood())) {
                 continue;
             }
 
-            if (searchGuitar.getTopWood() != null && !searchGuitar.getTopWood().equals(guitar.getTopWood())) {
+            if (searchSpec.getTopWood() != null && !searchSpec.getTopWood().equals(guitarSpec.getTopWood())) {
                 continue;
             }
             matchingGuitars.add(guitar);
         }
         if (matchingGuitars.isEmpty()) {
-            System.out.println("Nenhuma guitarra encontrada.");
+            System.out.println("OPSS... NADA FOI ENCOTRADO.");
         } else {
-            System.out.println("\n INSTRUMENTOS EM ESTOQUE");
+            System.out.println("\n INSTRUMENTOS EM ESTOQUE:");
             for (Guitar guitar : matchingGuitars) {
                 System.out.println(guitar);
             }
         }
-//        return matchingGuitars;
     }
 }
