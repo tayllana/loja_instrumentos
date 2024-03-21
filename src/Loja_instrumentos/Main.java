@@ -1,30 +1,77 @@
 package Loja_instrumentos;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
         Inventory inventory = new Inventory(null);
+        initializeInventory(inventory);
 
-        inventory.addInstrument("324894t45", 999.99, new GuitarSpec(Builder.FENDER, Model.CUSTOM_SHOP, Type.ELECTRIC, Wood.MAHOGANY, Wood.MAPLE, 6));
-        inventory.addInstrument("56tre6875", 1299.99, new GuitarSpec(Builder.GIBSON, Model.TELECASTER, Type.ELECTRIC, Wood.MAHOGANY, Wood.MAPLE, 7));
-        inventory.addInstrument("9284fj42w", 1599.99, new GuitarSpec(Builder.GIBSON, Model.D_28, Type.ELECTRIC, Wood.COCOBOLO, Wood.MAPLE, 8));
-
-        inventory.addInstrument("324894t45", 999.99, new MandolinSpec(Builder.FENDER, Model.CUSTOM_SHOP, Type.ELECTRIC, Wood.MAHOGANY, Wood.MAPLE, Style.A_STYLE));
-        inventory.addInstrument("56tre6875", 1299.99, new MandolinSpec(Builder.GIBSON, Model.TELECASTER, Type.ELECTRIC, Wood.MAHOGANY, Wood.MAPLE, Style.OVAL_STYLE));
-        inventory.addInstrument("9284fj42w", 1599.99, new MandolinSpec(Builder.GIBSON, Model.D_28, Type.ELECTRIC, Wood.COCOBOLO, Wood.MAPLE, Style.TEAR_DROP_STYLE));
+        Map<String, Object> properties = new HashMap<>();
         
-        List<Guitar> matchingGuitars = inventory.search(new GuitarSpec(Builder.GIBSON, Model.TELECASTER, Type.ELECTRIC, Wood.MAHOGANY, Wood.MAPLE, 7));
-        if (matchingGuitars.isEmpty()) {
-            System.out.println("OPSS... NADA FOI ENCOTRADO.");
-        } else {
-            System.out.println("\n INSTRUMENTOS EM ESTOQUE:");
-            for (Guitar guitar : matchingGuitars) {
-                System.out.println(guitar);
+        properties.put("builder", Builder.COLLINGS);
+        properties.put("backWood", Wood.SITKA);
+
+        InstrumentSpec clientSpec = new InstrumentSpec(properties);
+
+        List<Instrument> matchingInstruments = inventory.search(clientSpec);
+
+        if (!matchingInstruments.isEmpty()) {
+            System.out.println("\n Você pode gostar desses instrumentos:");
+
+            for (Instrument instrument : matchingInstruments) {
+                InstrumentSpec spec = instrument.getSpec();
+
+                System.out.println("\n Temos " + spec.getProperties().get("instrumentType") +
+                        " com as seguintes propriedades:");
+                
+                Map<String, Object> property = spec.getProperties();
+                
+                System.out.println("\n "+property.get("instrumentType")+" | " + instrument.getSerialNumber() + " | R$ "+instrument.getPrice());
+                
+                for (String propertyName : spec.getProperties().keySet()) {
+                    if (!propertyName.equals("instrumentType")) {
+                        System.out.println("  " + propertyName + ": " +
+                                spec.getProperties().get(propertyName));
+                    }
+                }
+                System.out.println("Você pode ter este " +
+                        spec.getProperties().get("instrumentType") + " por $" +
+                        instrument.getPrice() + "---");
             }
+        } else {
+            System.out.println("Sinto muito, não temos nada para você.");
         }
-	}
+    }
+
+    private static void initializeInventory(Inventory inventory) {
+
+        Map<String, Object> properties = new HashMap<>();
+
+        properties.put("instrumentType", InstrumentType.GUITAR);
+        properties.put("builder", Builder.COLLINGS);
+        properties.put("model", Model.D_28);
+        properties.put("type", Type.ACOUSTIC);
+        properties.put("numStrings", 6);
+        properties.put("topWood", Wood.INDIAN_ROSEWOOD);
+        properties.put("backWood", Wood.SITKA);
+
+        inventory.addInstrument("11277", 3999.95, new InstrumentSpec(properties));
+        
+//        Map<String, Object> properties2 = new HashMap<>();
+        properties.put("instrumentType", InstrumentType.GUITAR);
+        properties.put("builder", Builder.COLLINGS);
+        properties.put("model", Model.DREADNOUGHT);
+        properties.put("type", Type.ELECTRIC);
+        properties.put("numStrings", 6);
+        properties.put("topWood", Wood.ADIRONDACK);
+        properties.put("backWood", Wood.SITKA);
+
+        inventory.addInstrument("11437", 1999.95, new InstrumentSpec(properties));
+    }
 
 }

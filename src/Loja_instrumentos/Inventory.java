@@ -1,6 +1,7 @@
 package Loja_instrumentos;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Inventory {
@@ -13,13 +14,7 @@ public class Inventory {
 
 
 	public void addInstrument(String serialNumber, double price, InstrumentSpec spec){
-	
-	 Instrument instrument = null;
-	 if (spec instanceof GuitarSpec){
-		 instrument = new Guitar(serialNumber, price, (GuitarSpec)spec);
-	 } else if (spec instanceof MandolinSpec){
-		 instrument = new Mandolin(serialNumber, price, (MandolinSpec)spec);
-	 }
+	 Instrument instrument = new Instrument(serialNumber, price, spec);
 	 inventory.add(instrument);
 	 }
 	
@@ -31,38 +26,15 @@ public class Inventory {
 	 }
 	 return null;
 	}
-	public List<Guitar> search(GuitarSpec searchSpec){
-		List<Guitar> matchingGuitars = new ArrayList<Guitar>();
-		for (Instrument instrument: inventory){
-			if (instrument instanceof Guitar){
-				Guitar guitar = (Guitar) instrument;
-				if (guitar.getSpec().matches(searchSpec)){
-					matchingGuitars.add(guitar);
-				}
-			}
-		}
-		return matchingGuitars;
+	public List<Instrument> search(InstrumentSpec searchSpec) {
+	    List<Instrument> matchingInstruments = new ArrayList<>();
+	    for (Iterator i = inventory.iterator(); i.hasNext();) {
+	        Instrument instrument = (Instrument) i.next();
+	        if (instrument.getSpec().matches(searchSpec)) {
+	            matchingInstruments.add(instrument);
+	        }
+	    }
+
+	    return matchingInstruments;
 	}
-	public List<Mandolin> search(MandolinSpec searchSpec){
-		List<Mandolin> matchingMandolins = new ArrayList<Mandolin>();
-		for (Instrument instrument: inventory){
-			if (instrument instanceof Mandolin){
-			Mandolin mandolin = (Mandolin) instrument;
-				if (mandolin.getSpec().matches(searchSpec)){
-					matchingMandolins.add(mandolin);
-				}
-			}
-		}
-		return matchingMandolins;
-	}
-//    public List<Guitar> search(GuitarSpec searchSpec) {
-//        List<Guitar> matchingGuitars = new ArrayList<>();
-//
-//        for (Guitar guitar : guitarList) {
-//            if(guitar.getSpec().matches(searchSpec)) {
-//                matchingGuitars.add(guitar);	
-//            }
-//        }
-//        return matchingGuitars;
-//    }
 }
